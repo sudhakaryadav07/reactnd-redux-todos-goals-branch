@@ -84,6 +84,15 @@
             }
         }
 
+        const loading = (state = true, action) => {
+            switch (action.type) {
+                case RECIEVE_DATA:
+                    return false;
+                default:
+                    return state;
+            }
+        }
+
         const goals = (state = [], action) => {
             switch (action.type) {
                 case ADD_GOAL:
@@ -118,7 +127,7 @@
             return result;
         }
 
-        const store = Redux.createStore(Redux.combineReducers({ todos, goals }),
+        const store = Redux.createStore(Redux.combineReducers({ todos, goals, loading }),
             Redux.applyMiddleware(checker, logger));
 
     </script>
@@ -233,7 +242,12 @@
 
             render() {
                 let { store } = this.props;
-                const { goals, todos } = store.getState();
+                const { loading, goals, todos } = store.getState();
+
+                if (loading) {
+                    return <h3>Loading</h3>
+                }
+
                 return (
                     <div>
                         <Todos todos={todos} store={store} />
