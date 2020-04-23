@@ -6,20 +6,20 @@ function createStore() {
   // 4. Update the state
 
   let state
-  let listeners = [];
+  let listerners = [];
 
   const getState = () => state
 
-  const subscribe = (listener) => {
-    listeners.push(listener);
+  const subscribe = () => {
 
-    return () => {
-      listeners = listeners.filter((l) => l !== listener);
-    }
   }
 
-  return { getState, subscribe }
+  return {
+    getState
+  }
 }
 
 const store = createStore();
-
+store.subscribe(() => {
+  console.log("New staate", store.getState())
+})

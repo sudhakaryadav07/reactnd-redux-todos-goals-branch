@@ -11,11 +11,7 @@ function createStore() {
   const getState = () => state
 
   const subscribe = (listener) => {
-    listeners.push(listener);
-
-    return () => {
-      listeners = listeners.filter((l) => l !== listener);
-    }
+    listeners.push(listener)
   }
 
   return { getState, subscribe }
@@ -23,3 +19,10 @@ function createStore() {
 
 const store = createStore();
 
+store.subscribe(() => {
+  console.log("New state", store.getState())
+});
+
+store.subscribe(() => {
+  console.log("Other New state", store.getState())
+})

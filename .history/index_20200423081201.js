@@ -23,3 +23,12 @@ function createStore() {
 
 const store = createStore();
 
+store.subscribe(() => {
+  console.log("New state", store.getState())
+});
+
+const unsubscribe = store.subscribe(() => {
+  console.log("Unsubscribe")
+})
+
+unsubscribe();
