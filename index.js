@@ -1,5 +1,5 @@
 //Library
-function createStore(reducer) {
+const createStore = (reducer) => {
   // The store should have four parts
   // 1. The state
   // 2. Get the state.
@@ -27,36 +27,97 @@ function createStore(reducer) {
 }
 
 //App code
-function todos(state = [], action) {
-  switch (action.type) {
-    case 'ADD_TODO':
-      return state.concat([action.todo]);
 
-    case 'REMOVE_TODO':
-      return state.filter((todo) => todo.id !== action.id)
+const ADD_TODO = 'ADD_TODO';
+const REMOVE_TODO = 'REMOVE_TODO';
+const TOGGLE_TODO = 'TOGGLE_TODO';
 
-    case 'TOGGLE_TODO':
-      return state.map((todo) => todo.id !== action.id ? todo :
-        Object.assign({}, todo, { complete: !todo.complete }));
+const ADD_GOAL = 'ADD_GOAL';
+const REMOVE_GOAL = 'REMOVE_GOAL';
 
-    default:
-      state;
+const addTodoAction = (todo) => {
+  return {
+    type: ADD_TODO,
+    todo
   }
 }
 
-const store = createStore(todos);
+const removeTodoAction = (id) => {
+  return {
+    type: REMOVE_TODO,
+    id
+  }
+}
+
+const toggleTodoAction = (id) => {
+  return {
+    type: TOGGLE_TODO,
+    id
+  }
+}
+
+const addGoalAction = (goal) => {
+  return {
+    type: ADD_TODO,
+    goal
+  }
+}
+
+const removeGoalAction = (id) => {
+  return {
+    type: ADD_TODO,
+    id
+  }
+}
+
+const todos = (state = [], action) => {
+  switch (action.type) {
+    case ADD_TODO:
+      return state.concat([action.todo])
+    case REMOVE_TODO:
+      return state.filter((todo) => todo.id !== action.id)
+    case TOGGLE_TODO:
+      return state.map((todo) => todo.id !== action.id ? todo :
+        Object.assign({}, todo, { complete: !todo.complete }))
+    default:
+      return state
+  }
+}
+
+const goals = (state = [], action) => {
+  switch (action.type) {
+    case ADD_GOAL:
+      return state.concat([action.goal]);
+    case REMOVE_GOAL:
+      return state.filter((goal) => goal.id !== action.id)
+    default:
+      return state;
+  }
+}
+
+const app = (state = {}, action) => {
+  return {
+    todos: todos(state.todos, action),
+    goals: goals(state.goals, action)
+  }
+}
+
+const store = createStore(app);
 
 store.subscribe(() => {
-  console.log("the new state is ", store.getState());
+  console.log("the new state is : ", store.getState());
 });
 
-store.dispatch({
-  type: 'ADD_TODO',
-  todo: {
-    id: 0,
-    name: "Learn React",
-    complete: false
-  }
-});
+store.dispatch(addTodoAction({
+  id: 1,
+  name: "Learn React",
+  complete: false
+}));
 
+store.dispatch(addTodoAction({
+  id: 2,
+  name: "Learn React Native",
+  complete: false
+}));
 
+store.dispatch(toggleTodoAction(1));
